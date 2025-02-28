@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import "../App.css"
 
+
 const AdviceContainer = () => 
 {
     const [adviceID, setAdviceID] = useState('');
@@ -17,40 +18,29 @@ const AdviceContainer = () =>
         setAdvice(`"${data.slip.advice}"`);
     }
 
-    const dividerResponsiveness = () => 
-    {
-        if (window.innerWidth < 768)
-        {
-            setDividePart('/images/pattern-divider-mobile.svg');
-        }
-        else
-        {
-            setDividePart('/images/pattern-divider-desktop.svg');
-        }
-    };
-
     useEffect(() => 
     {
         grabAdviceData();
     }, []);
 
-    useEffect(() => 
+    useEffect(() => //Resize function
     {
-        dividerResponsiveness();
-        window.addEventListener('resize', dividerResponsiveness);
-
-        return () => 
-        {
-            window.removeEventListener('resize', dividerResponsiveness);
-        };
+        const handleResize = () => 
+            setDividePart(window.innerWidth < 768 
+                ? '/images/pattern-divider-mobile.svg' 
+                : '/images/pattern-divider-desktop.svg');
+    
+        handleResize(); // initial divider
+        window.addEventListener('resize', handleResize);
+    
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
     
-
     return (
         <div className="w-[350px] md:w-[550px] h-auto max-h-[900px] bg-[#313A49] rounded-lg flex flex-col items-center relative">
 
-            <p className="text-[#52ffa8] font-[Manrope] font-medium text-[16px] my-10">A D V I C E  # {adviceID}</p>
-            <p className='text-[#cee3e9] font-[Manrope] font-semibold text-[28px] text-center w-[90%]'>{advice}</p>
+            <p className="text-[#52ffa8] font-medium text-[16px] my-10">A D V I C E  # {adviceID}</p>
+            <p className='text-[#cee3e9] font-semibold text-[28px] text-center w-[90%]'>{advice}</p>
 
             <img src={dividePart} alt="divider" className='mt-10 mb-20' />
 
